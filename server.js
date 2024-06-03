@@ -22,7 +22,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 const corsOptions = {//for localhost on local machine use http://localhost:3000
-  origin: 'https://bidbotauctionsystem.onrender.com', // Replace with your React app's domain //use for deployed frontend
+  origin: 'https://saran-backend.onrender.com', // Replace with your React app's domain //use for deployed frontend
   credentials: true,
 };
 app.use(express.json());
@@ -41,7 +41,7 @@ const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER, // Some fake encrypted Gmail email address
-    pass: process.env.EMAIL_PASSWORD,  // Some fake Encrypted Password
+    pass: process.env.EMAIL_PASSWORD,  // Some fake Encrypte  d Password
   },
 });
 
