@@ -7,7 +7,9 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer'); 
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const app = express();
 mongoose.set("strictQuery", true)
 // Connect to MongoDB (replace this URI with your actual MongoDB URI)
@@ -488,4 +490,26 @@ app.post('/api/sendWelcomeEmail', async (req, res) => {
 const port = process.env.PORT || 5500;
 app.listen(port, () => {
   console.log("Server is started on port " + port);
+});
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: 'your-cloud-name',
+  api_key: 'your-api-key',
+  api_secret: 'your-api-secret',
+});// Configure multer storage with Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'bids',
+    format: async (req, file) => 'png', // supports promises as well
+    public_id: (req, file) => file.originalname,
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// Route to handle image upload
+app.post('/upload', upload.single('image'), (req, res) => {
+  res.json({ imageUrl: req.file.path });
 });
